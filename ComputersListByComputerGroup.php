@@ -1,16 +1,14 @@
 <?php
+// Returns a list of the Computer IDs of all the Computers contained in particular Computer Group
+	
 	// Defines output as an XML Document
 	header('Content-type: application/xml');
 	
 	// Fetches HTTP variables from the PHP's Domain URL into PHP variables
-	$userName = $_GET['user'];
-	$password = $_GET['pass'];
-	$server = $_GET['serv'];
-	$computerGroup = $_GET['cg'];
-	//$site = $_GET['site'];
-	
-	//$computerGroup = str_replace('%20', ' ', $computerGroup);
-	//$computerGroup = str_replace('%2F', '/', $computerGroup);
+	$userName = $_GET['user'];     // BigFix Username
+	$password = $_GET['pass'];     // BigFix Password
+	$server = $_GET['serv'];       // BigFix Server Name  EX:"bigfixserver:52311"
+	$computerGroup = $_GET['cg'];  // Computer Group Name
 	
 	// Relevance Query as Concatenated String
 	$relevance = 
@@ -21,7 +19,7 @@
 		'whose (name of it = "'.$computerGroup.'") ';
 	
 	// HTTP Encoding to make the relevance query URL Friendly
-	$relevance = str_replace('%', '%252525', $relevance);
+	$relevance = str_replace('%', '%252525', $relevance); // This is the reason why I could not simply use "urlencode".  In order for '%' to be used in the relevance as a string you must specially encode it like this.
 	$relevance = str_replace(' ', '%20', $relevance);
 	$relevance = str_replace('!', '%21', $relevance);
 	$relevance = str_replace('"', '%22', $relevance);
