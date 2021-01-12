@@ -1,12 +1,13 @@
 <?php
+// This Query returns a list of all Computer Applications as well as their versions, and include a count of the number of computers each is installed on in the network.  Can also be filtered by Computer Group.
 	// Defines output as an XML Document
 	header('Content-type: application/xml');
 	
 	// Fetches HTTP variables from the PHP's Domain URL into PHP variables
-	$userName = $_GET['user'];
-	$password = $_GET['pass'];
-	$server = $_GET['serv'];
-	$filter = $_GET['cg'];
+	$userName = $_GET['user'];   // BigFix Username
+	$password = $_GET['pass'];   // BigFix Password
+	$server = $_GET['serv'];     // BigFix Server Name EX:"bigfixserver:52311"
+	$filter = $_GET['cg'];       // Computer Group Name, case sensitive
 	
 	$filter = str_replace('%20', ' ', $filter);
 	$filter = str_replace('%2F', '/', $filter);
@@ -29,7 +30,7 @@
 		') '.
 		'of '.
 		'unique values '.
-		//
+		// Some application names contain forbidden characters that cannot be displayed as strings, creating errors in the query.  These are a series of conditional statements designed to remove these forbidden characters should they occur.
 		'of '.
 		'( '.
 			'if (it contains "%1F") '.
@@ -228,7 +229,7 @@
 		
 		
 	// HTTP Encoding to make the relevance query URL Friendly
-	//$relevance = str_replace('%', '%252525', $relevance);
+	//$relevance = str_replace('%', '%252525', $relevance); // This is the reason why I could not simply use "urlencode".  In order for '%' to be used in the relevance as a string you must specially encode it like this.
 	$relevance = str_replace(' ', '%20', $relevance);
 	$relevance = str_replace('!', '%21', $relevance);
 	$relevance = str_replace('"', '%22', $relevance);
