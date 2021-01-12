@@ -8,7 +8,7 @@
 	$userName = $_GET['user'];   // BigFix Username
 	$password = $_GET['pass'];   // BigFix Password
 	$server = $_GET['serv'];     // BigFix Server Name  EX:"bigfixserver:52311"
-	$filter = $_GET['cg'];       // Computer Group Name
+	$filter = $_GET['cg'];       // Computer Group Name, case sensitive
 	
 	$filter = str_replace('%20', ' ', $filter);
 	$filter = str_replace('%2F', '/', $filter);
