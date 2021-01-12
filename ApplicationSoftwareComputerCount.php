@@ -1,3 +1,4 @@
+// This Query returns a single integer value for the total number of member computers that have application software installed on them filtered by Computer Group.
 <?php
 	// Defines output as an XML Document
 	header('Content-type: application/xml');
