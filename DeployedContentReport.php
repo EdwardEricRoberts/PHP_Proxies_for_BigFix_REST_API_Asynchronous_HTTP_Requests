@@ -1,5 +1,5 @@
 <?php
-// Creates a list of Remediated Windows Patches that is formatted asthetically for HTML output.  Also includes the number of Computers each Patch is remidiated on.
+// Creates a list of Remediated Windows Patches that is formatted asthetically for HTML output.  Also includes the number of Computers each Patch is remidiated on.  Can also be filtered by Computer Group.
 	
 	// Defines output as an XML Document
 	header('Content-type: application/xml');
