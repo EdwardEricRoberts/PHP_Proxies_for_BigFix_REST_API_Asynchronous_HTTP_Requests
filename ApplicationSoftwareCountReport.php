@@ -1,5 +1,5 @@
 <?php
-// This Query returns a list of all Computer Applications as well as their versions, and include a count of the number of computers each is installed on in the network.  Can also be filtered by Computer Group.
+// This Query returns a list of all Computer Applications as well as their versions, and includes a count of the number of computers each is installed on in the network.  Can also be filtered by Computer Group.
 	// Defines output as an XML Document
 	header('Content-type: application/xml');
 	
