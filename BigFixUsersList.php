@@ -1,5 +1,6 @@
 <?php
 // This query returns a list BigFix Users that the current BigFix User is able to access
+	
 	// Defines output as an XML Document
 	header('Content-type: application/xml');
 	
