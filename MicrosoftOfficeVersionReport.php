@@ -1,100 +1,19 @@
 <?php
+// Returns a list of Computers that have installed a version of Microsoft Office which includes the name and version number of the application.  Can also be filtered by Computer Group.
+	
 	// Defines output as an XML Document
 	header('Content-type: application/xml');
 	
 	// Fetches HTTP variables from the PHP's Domain URL into PHP variables
-	$userName = $_GET['user'];
-	$password = $_GET['pass'];
-	$server = $_GET['serv'];
-	$filter = $_GET['cg'];
+	$userName = $_GET['user'];   // BigFix Username
+	$password = $_GET['pass'];   // BigFix Password
+	$server = $_GET['serv'];     // BigFix Server Name  EX:"bigfixserver.companyname.com:52311"
+	$filter = $_GET['cg'];       // Computer Group Name, case sensitive
 	
 	$filter = str_replace('%20', ' ', $filter);
 	$filter = str_replace('%2F', '/', $filter);
 	
 	// Relevance Query as Concatenated String
-	$relevance = 
-	/*
-		//'number of '.
-		'( '.
-			'id of item 1 of it, '.
-			'(name of item 1 of it | "<none>") & "<br>" & (device type of item 1 of it | "<none>"), '.
-			''.
-			'item 0 of it | "<none>", '.
-			'( '.
-				'if (exists first "|" of item 0 of it) '.
-				'then (preceding text of first "|" of item 0 of it) '.
-				'else (item 0 of it) '.
-			'), '.
-			'( '.
-				'if (exists first "|" of item 0 of it) '.
-				'then (following text of first "|" of item 0 of it) '.
-				'else ("-") '.
-			') '.
-		') of '.
-		'( '.
-			'values whose (it as lowercase contains "microsoft office") of it, ';
-			
-	if ($filter == "All Machines") {
-		$relevance .= 
-			'computers of it ';
-	}
-	else {
-		$relevance .= 
-			'computers '.
-			'whose '.
-			'( '.
-				'id of it = id of members of bes computer groups whose (name of it = "'.$filter.'") '.
-			')'.
-			'of it ';
-	}
-	$relevance .= 
-		') of '.
-		'results of '.
-		'bes properties whose (name of it contains "Installed Applications - Windows" and name of source analysis of it = "Application Information (Windows)")';
-	*/
-	/*
-	//'number of '.
-		'( '.
-			'id of item 1 of it, '.
-			'(name of item 1 of it | "<none>") & " <br>" & (device type of item 1 of it | "<none>"), '.
-			'concatenation " <br>" of values of results from (bes property "User Name") of (item 1 of it) as string | "<none>", '.
-			'item 0 of it | "<none>", '.
-			'( '.
-				'if (exists first "|" of item 0 of it) '.
-				'then (preceding text of first "|" of item 0 of it) '.
-				'else (item 0 of it) '.
-			'), '.
-			'( '.
-				'if (exists first "|" of item 0 of it) '.
-				'then (following text of first "|" of item 0 of it) '.
-				'else ("-") '.
-			') '.
-		') '.
-		'of '.
-		'( '.
-			'values whose ((it as lowercase contains "microsoft office") and (start of (substring "microsoft office" of (it as lowercase)) = 0)) of it, '.
-			'computers of it '.
-		') '.
-		'of '.
-		'results '.
-		'( '.
-			'bes property "Installed Applications - Windows" '.
-			'whose (name of source analysis of it = "Application Information (Windows)") '.
-			', ';
-	if ($filter == "All Machines") {
-		$relevance .= 
-			'bes computers';
-	}
-	else {
-		$relevance .= 
-			'members of '.
-			'bes computer groups '.
-			'whose (name of it = "'.$filter.'")';
-	}
-	$relevance .= 
-		')';
-	*/
-	
 	$relevance = 
 		//'number of '.
 		'( '.
@@ -127,9 +46,9 @@
 		') '.
 		'of '.
 		'( '.
-			'set of bes properties whose (id of it = (2299708709, 2930, 1)), '. //"Installed Applications - Window"
+			'set of bes properties whose (id of it = (2299708709, 2930, 1)), '. //"Installed Applications - Window"    This property ID might be different in your Network
 			'set of ';
-	if ($filter == "All Machines") {
+	if ($filter == "All Machines") {   // This is what I used for my "Return Everything" state, there weren't any Computer Groups with this name
 		$relevance .= 
 			'bes computers, ';
 	}
@@ -142,11 +61,11 @@
 			'), ';
 	}
 	$relevance .= 
-			'set of bes properties whose (id of it = (2299708709, 29, 1)) '. //"User Name"
+			'set of bes properties whose (id of it = (2299708709, 29, 1)) '. //"User Name"      This property ID might be different in your Network
 		') ';
 	
 	// HTTP Encoding to make the relevance query URL Friendly
-	$relevance = str_replace('%', '%252525', $relevance);
+	$relevance = str_replace('%', '%252525', $relevance); // This is the reason why I could not simply use "urlencode".  In order for '%' to be used in the relevance as a string you must specially encode it like this.
 	$relevance = str_replace(' ', '%20', $relevance);
 	$relevance = str_replace('!', '%21', $relevance);
 	$relevance = str_replace('"', '%22', $relevance);
