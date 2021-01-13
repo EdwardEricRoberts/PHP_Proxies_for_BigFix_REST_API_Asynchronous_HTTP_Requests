@@ -8,7 +8,7 @@
 	$userName = $_GET['user'];     // BigFix Username
 	$password = $_GET['pass'];     // BigFix Password
 	$server = $_GET['serv'];       // BigFix Server Name  EX:"bigfixserver.companyname.com:52311"
-	$computerGroup = $_GET['cg'];  // Computer Group Name
+	$computerGroup = $_GET['cg'];  // Computer Group Name, case sensitive
 	
 	// Relevance Query as Concatenated String
 	$relevance = 
