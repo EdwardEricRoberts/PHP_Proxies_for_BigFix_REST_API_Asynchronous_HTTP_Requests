@@ -1,12 +1,14 @@
 <?php
+// This is a special report that allows the user to select as many Computer Groups as they wish and then see a summery of the "patch compliance" (numbers of Remidiated and Relevant Windows patches as well as a percentage ratio of how many Remidiated patches out of the total number of patches available) for each Computer Group.  The First row of of the list is a Summary that contains the totals for all the Computers in the selected Computer Groups.
+	
 	// Defines output as an XML Document
 	header('Content-type: application/xml');
 	
 	// Fetches HTTP variables from the PHP's Domain URL into PHP variables
-	$userName = $_GET['user'];
-	$password = $_GET['pass'];
-	$server = $_GET['serv'];
-	$computerGroups = json_decode($_GET['cg']);
+	$userName = $_GET['user'];                      // BigFix Username
+	$password = $_GET['pass'];                      // BigFix Password
+	$server = $_GET['serv'];                        // BigFix Server Name  EX:"bigfixserver.companyname.com:52311"
+	$computerGroups = json_decode($_GET['cg']);     // JSON style Array of Computer Group IDs  EX:"[1,2,3,5,12,23]"
 	
 	if (sizeof($computerGroups) == 0)
 		$computerGroups = array(0);
@@ -254,7 +256,7 @@
 		') ';
 	
 	// HTTP Encoding to make the relevance query URL Friendly
-	$relevance = str_replace('%', '%252525', $relevance);
+	$relevance = str_replace('%', '%252525', $relevance); // This is the reason why I could not simply use "urlencode".  In order for '%' to be used in the relevance as a string you must specially encode it like this.
 	$relevance = str_replace(' ', '%20', $relevance);
 	$relevance = str_replace('!', '%21', $relevance);
 	$relevance = str_replace('"', '%22', $relevance);
