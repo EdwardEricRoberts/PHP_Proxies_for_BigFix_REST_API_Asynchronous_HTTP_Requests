@@ -1,12 +1,14 @@
 <?php
+// Returns a list of Computers and shows how much Free Space they have remaining on their hard disc.  Compares that free space to the total disc space, and if the remaining space is less then 5% it will issue an alert.
+	
 	// Defines output as an XML Document
 	header('Content-type: application/xml');
 	
 	// Fetches HTTP variables from the PHP's Domain URL into PHP variables
-	$userName = $_GET['user'];
-	$password = $_GET['pass'];
-	$server = $_GET['serv'];
-	$filter = $_GET['cg'];
+	$userName = $_GET['user'];   // BigFix Username
+	$password = $_GET['pass'];   // BigFix Password
+	$server = $_GET['serv'];     // BigFix Server Name  EX:"bigfixserver.companyname.com:52311"
+	$filter = $_GET['cg'];       // Computer Group Name, case sensitive
 	
 	$filter = str_replace('%20', ' ', $filter);
 	$filter = str_replace('%2F', '/', $filter);
@@ -107,23 +109,9 @@
 			'bes computer groups '.
 			'whose ( name of it = "'.$filter.'") ';
 	}
-		
-	/*
-		'('.
-			'it, '.
-			'bes computers'.
-		') '.
-		'whose(id of item 1 of it = item 0 of it) '.
-		'of '.
-		'('.
-			'unique values of ids of '.
-			'members of bes computer groups '.
-			//'whose (name of it = "CAS Desktops")'.
-		')';
-	*/
 	
 	// HTTP Encoding to make the relevance query URL Friendly
-	$relevance = str_replace('%', '%252525', $relevance);
+	$relevance = str_replace('%', '%252525', $relevance); // This is the reason why I could not simply use "urlencode".  In order for '%' to be used in the relevance as a string you must specially encode it like this.
 	$relevance = str_replace(' ', '%20', $relevance);
 	$relevance = str_replace('!', '%21', $relevance);
 	$relevance = str_replace('"', '%22', $relevance);
