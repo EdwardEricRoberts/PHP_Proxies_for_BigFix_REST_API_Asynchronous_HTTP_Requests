@@ -1,12 +1,15 @@
 <?php
+// Returns a list of Windows Patches accompanied by the number of Computers that each patch is Remidiated on or Relevant for as well as a Compliance Percentage.  Can also be filtered by Computer Group.
+
+	
 	// Defines output as an XML Document
 	header('Content-type: application/xml');
 	
 	// Fetches HTTP variables from the PHP's Domain URL into PHP variables
-	$userName = $_GET['user'];
-	$password = $_GET['pass'];
-	$server = $_GET['serv'];
-	$filter = $_GET['cg'];
+	$userName = $_GET['user'];   // BigFix Username
+	$password = $_GET['pass'];   // BigFix Password
+	$server = $_GET['serv'];     // BigFix Server Name  EX:"bigfixserver.companyname.com:52311"
+	$filter = $_GET['cg'];       // Computer Group Name, case sensitive
 	
 	$filter = str_replace('%20', ' ', $filter);
 	$filter = str_replace('%2F', '/', $filter);
@@ -148,8 +151,6 @@
 			'), '.
 			'( '.
 				'set of '.
-		//if ($filter == "All Machines") {
-		//	$relevance .= 
 				'fixlets '.
 				'whose '.
 				'( '.
@@ -179,53 +180,11 @@
 				'of '.
 				'bes sites '.
 				'whose (name of it = "Enterprise Security") '.
-		//}
-		//else {
-		//	$relevance .= 
-		//		'items 0 of '.
-		//		'( '.
-		//			'( '.
-		//				'fixlets '.
-		//				'whose '.
-		//				'( '.
-		//					'globally visible flag of it = TRUE and '.
-		//					'( '.
-		//						'exists source severity '.
-		//						'whose '.
-		//						'( '.
-		//							'it is not "" and '.
-		//							'it does not contain "N/A" and '.
-		//							'it does not contain "Unspecified" '.
-		//						') '.
-		//						'of it '.
-		//					') and '.
-		//					'(source release date of it) > date "01 Apr 2015" and '.
-		//					'exists results whose (remediated flag of it or relevant flag of it) of it '.
-		//				') '.
-		//				'of '.
-		//				'bes sites '.
-		//				'whose (name of it = "Enterprise Security") '
-		//			'), '.
-		//			'it '.
-		//		') '.
-		//		'whose (id of item 0  of it = id of item 1 of it) '.
-		//		'of '.
-		//		'fixlets '.
-		//		'whose '.
-		//		'( '.
-		//			'type of it = "ComputerGroup" and '.
-		//			'name of it = "'.$filter.'" '.
-		//		') '.
-		//		'of '.
-		//		'bes sites '.
-		//		'whose (name of it = "ActionSite") '.
-		//}
-		//$relevance .= 
 			') '.
 		') ';
 	
 	// HTTP Encoding to make the relevance query URL Friendly
-	$relevance = str_replace('%', '%252525', $relevance);
+	$relevance = str_replace('%', '%252525', $relevance); // This is the reason why I could not simply use "urlencode".  In order for '%' to be used in the relevance as a string you must specially encode it like this.
 	$relevance = str_replace(' ', '%20', $relevance);
 	$relevance = str_replace('!', '%21', $relevance);
 	$relevance = str_replace('"', '%22', $relevance);
