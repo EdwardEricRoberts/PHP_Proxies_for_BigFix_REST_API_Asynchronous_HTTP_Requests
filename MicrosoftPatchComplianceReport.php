@@ -1,12 +1,14 @@
 <?php
+// Returns a list of accessable Windows Computers that also compares the overall numbers of Remidiated and Relevant Windows Patches returning the ratio as a compliance percentage.  Can also be filtered by Computer Group.
+	
 	// Defines output as an XML Document
 	header('Content-type: application/xml');
 	
 	// Fetches HTTP variables from the PHP's Domain URL into PHP variables
-	$userName = $_GET['user'];
-	$password = $_GET['pass'];
-	$server = $_GET['serv'];
-	$filter = $_GET['cg'];
+	$userName = $_GET['user'];   // BigFix Username
+	$password = $_GET['pass'];   // BigFix Password
+	$server = $_GET['serv'];     // BigFix Server Name  EX:"bigfixserver.companyname.com:52311"
+	$filter = $_GET['cg'];       // Computer Group, case sensitive
 	
 	$filter = str_replace('%20', ' ', $filter);
 	$filter = str_replace('%2F', '/', $filter);
@@ -17,7 +19,6 @@
 		'( '.
 			'id of item 0 of it, '.
 			'(name of item 0 of it | "<none>") & " <br>" & (device type of item 0 of it | "<none>"), '.
-			//'device type of item 0 of it | "<none>", '.
 			'concatenation " <br>" of values of results from (bes property "User Name") of item 0 of it as string | "<none>", '.
 			'((preceding text of first " " of operating system of item 0 of it) as string & " <br>" & (following text of first " " of operating system of item 0 of it) as string) | "<none>", '.
 			'concatenation " <br>" of (ip addresses of item 0 of it as string) | "<none>", '.
@@ -53,14 +54,14 @@
 				'time (local time zone) of it '.
 			') of last report time of item 0 of it, '.
 			//'last report time of item 0 of it as string | "<none>", '.
-			'item 2 of it, '.
-			'(item 2 of it) - (item 1 of it), '.
-			'item 1 of it, '.
+			'item 2 of it, '.                         // Count of Applicable Windows Patches
+			'(item 2 of it) - (item 1 of it), '.      // Count of Remidiated Windows Patches
+			'item 1 of it, '.                         // Count of Relevant Windows Patches
 			'( '.
 				'if (item 2 of it = 0) '.
 				'then ("N/A") '.
 				'else ((100 - (item 1 of it as floating point / item 2 of it as floating point * 100)) as integer as string & "%") '.
-			')'.
+			')'.   // Compliance Percentage
 		') '.
 		'of '.
 		'( '.
@@ -77,7 +78,7 @@
 		'( '.
 			'( '.
 				'set of ';
-		if ($filter == "All Machines") {
+		if ($filter == "All Machines") {    // This is what I used for my "select everything" state, no Computer Group with that name existed
 			$relevance .= 
 				'subscribed computers of '.
 				'bes sites '.
@@ -124,7 +125,7 @@
 		') ';
 	
 	// HTTP Encoding to make the relevance query URL Friendly
-	$relevance = str_replace('%', '%252525', $relevance);
+	$relevance = str_replace('%', '%252525', $relevance); // This is the reason why I could not simply use "urlencode".  In order for '%' to be used in the relevance as a string you must specially encode it like this.
 	$relevance = str_replace(' ', '%20', $relevance);
 	$relevance = str_replace('!', '%21', $relevance);
 	$relevance = str_replace('"', '%22', $relevance);
