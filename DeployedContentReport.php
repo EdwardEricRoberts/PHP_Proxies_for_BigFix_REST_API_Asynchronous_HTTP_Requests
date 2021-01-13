@@ -7,7 +7,7 @@
 	// Fetches HTTP variables from the PHP's Domain URL into PHP variables
 	$userName = $_GET['user'];   // BigFix Username
 	$password = $_GET['pass'];   // BigFix Password
-	$server = $_GET['serv'];     // BigFix Server Name  EX:"bigfixserver:52311"
+	$server = $_GET['serv'];     // BigFix Server Name  EX:"bigfixserver.companyname.com:52311"
 	$filter = $_GET['cg'];       // Computer Group Name, case sensitive
 	
 	$filter = str_replace('%20', ' ', $filter);
