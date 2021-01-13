@@ -1,13 +1,15 @@
 <?php
+// Searches for Computers that have Applications with names that are similar to the Search Term.
+	
 	// Defines output as an XML Document
 	header('Content-type: application/xml');
 	
 	// Fetches HTTP variables from the PHP's Domain URL into PHP variables
-	$userName = $_GET['user'];
-	$password = $_GET['pass'];
-	$server = $_GET['serv'];
-	$application = $_GET['app'];
-	$filter = $_GET['cg'];
+	$userName = $_GET['user'];    // BigFix Username
+	$password = $_GET['pass'];    // BigFix Password
+	$server = $_GET['serv'];      // BigFix Server Name  EX:"bigfixserver.companyname.com:52311"
+	$application = $_GET['app'];  // Application Search Word
+	$filter = $_GET['cg'];        // Computer Group Name, case sensitive
 	
 	$filter = str_replace('%20', ' ', $filter);
 	$filter = str_replace('%2F', '/', $filter);
@@ -78,6 +80,7 @@
 			')'.
 		')'.
 		'of '.
+		// some application names contain forbidden characters that cause errors.  These conditional statements are to remove fobidden characters from the output.
 		'('.
 			'item 0 of it, '.
 			'( '.
@@ -376,7 +379,7 @@
 	}
 
 	// HTTP Encoding to make the relevance query URL Friendly
-	$relevance = str_replace(' ', '%20', $relevance);
+	$relevance = str_replace(' ', '%20', $relevance); // This is the reason why I could not simply use "urlencode".  In order for '%' to be used in the relevance as a string you must specially encode it like this.
 	$relevance = str_replace('!', '%21', $relevance);
 	$relevance = str_replace('"', '%22', $relevance);
 	$relevance = str_replace('#', '%23', $relevance);
