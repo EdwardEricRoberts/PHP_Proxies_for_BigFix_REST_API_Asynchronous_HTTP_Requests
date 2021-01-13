@@ -1,15 +1,17 @@
 <?php
+// Returns a list of all BigFix Users that have permission to access a particular Site.  The Site Name and Site Type must be lined up correctly.
+	
 	// Defines output as an XML Document
 	header('Content-type: application/xml');
 	
 	// Fetches HTTP variables from the PHP's Domain URL into PHP variables
-	$userName = $_GET['user'];
-	$password = $_GET['pass'];
-	$server = $_GET['serv'];
-	$siteType = $_GET['type']; //external, custom, operator, master
-	$site = $_GET['site'];
+	$userName = $_GET['user'];  // BigFix Username
+	$password = $_GET['pass'];  // BigFix Password 
+	$server = $_GET['serv'];    // BigFix Server Name  EX:"bigfixserver.companyname.com:52311"
+	$siteType = $_GET['type'];  // Site Type can only be one of the following (external, custom, operator, or master)
+	$site = $_GET['site'];      // Site Name, case sensitive
 	
-	$site = str_replace('%', '%252525', $site);
+	$site = str_replace('%', '%252525', $site); // This is the reason why I could not simply use "urlencode".  In order for '%' to be used in the relevance as a string you must specially encode it like this.
 	$site = str_replace(' ', '%20', $site);
 	$site = str_replace('!', '%21', $site);
 	$site = str_replace('"', '%22', $site);
